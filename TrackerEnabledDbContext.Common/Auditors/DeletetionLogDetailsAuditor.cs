@@ -8,7 +8,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
 {
     public class DeletetionLogDetailsAuditor: ChangeLogDetailsAuditor
     {
-        public DeletetionLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log) : base(dbEntry, log)
+        public DeletetionLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log, DbPropertyValues dbEntryDbValues) : base(dbEntry, log, dbEntryDbValues)
         {
         }
 

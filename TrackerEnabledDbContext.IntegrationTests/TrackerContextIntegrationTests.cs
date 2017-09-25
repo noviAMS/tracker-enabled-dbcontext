@@ -410,7 +410,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             Db.NormalModels.Add(model);
             Db.ChangeTracker.DetectChanges();
             var entry = Db.ChangeTracker.Entries().First();
-            var auditor = new AdditionLogDetailsAuditor(entry, null);
+            var auditor = new AdditionLogDetailsAuditor(entry, null, null);
 
             Db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
             var auditLogDetails = auditor.CreateLogDetails().ToList();
@@ -426,7 +426,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             model.Description += RandomText;
             Db.ChangeTracker.DetectChanges();
             var entry = Db.ChangeTracker.Entries().First();
-            var auditor = new ChangeLogDetailsAuditor(entry, null);
+            var auditor = new ChangeLogDetailsAuditor(entry, null, null);
 
             Db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
             var auditLogDetails = auditor.CreateLogDetails().ToList();
@@ -442,7 +442,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             Db.NormalModels.Remove(model);
             Db.ChangeTracker.DetectChanges();
             var entry = Db.ChangeTracker.Entries().First();
-            var auditor = new ChangeLogDetailsAuditor(entry, null);
+            var auditor = new ChangeLogDetailsAuditor(entry, null, null);
 
             Db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
             var auditLogDetails = auditor.CreateLogDetails().ToList();

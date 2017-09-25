@@ -12,7 +12,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
     /// </summary>
     public class AdditionLogDetailsAuditor : ChangeLogDetailsAuditor
     {
-        public AdditionLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log) : base(dbEntry, log)
+        public AdditionLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log, DbPropertyValues dbEntryDbValues) : base(dbEntry, log, dbEntryDbValues)
         {
         }
 

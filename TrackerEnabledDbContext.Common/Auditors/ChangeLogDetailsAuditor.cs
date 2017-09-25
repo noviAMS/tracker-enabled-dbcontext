@@ -14,11 +14,13 @@ namespace TrackerEnabledDbContext.Common.Auditors
     {
         protected readonly DbEntityEntry DbEntry;
         private readonly AuditLog _log;
+        private DbPropertyValues _dbEntryDbValues;
 
-        public ChangeLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log)
+        public ChangeLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log, DbPropertyValues dbEntryDbValues)
         {
             DbEntry = dbEntry;
             _log = log;
+            _dbEntryDbValues = dbEntryDbValues;
         }
 
         public IEnumerable<AuditLogDetail> CreateLogDetails()
@@ -85,7 +87,10 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
             if (GlobalTrackingConfig.DisconnectedContext)
             {
-                originalValue = DbEntry.GetDatabaseValues().GetValue<object>(propertyName);
+                if (_dbEntryDbValues == null)
+                    _dbEntryDbValues = DbEntry.GetDatabaseValues();
+
+                originalValue = _dbEntryDbValues.GetValue<object>(propertyName);
             }
             else
             {

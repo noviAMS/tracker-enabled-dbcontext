@@ -13,6 +13,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
     internal class LogAuditor : IDisposable
     {
         private readonly DbEntityEntry _dbEntry;
+        private DbPropertyValues dbEntryDbValues;
 
         internal LogAuditor(DbEntityEntry dbEntry)
         {
@@ -74,19 +75,19 @@ namespace TrackerEnabledDbContext.Common.Auditors
             switch (eventType)
             {
                 case EventType.Added:
-                    return new AdditionLogDetailsAuditor(_dbEntry, newlog);
+                    return new AdditionLogDetailsAuditor(_dbEntry, newlog, dbEntryDbValues);
 
                 case EventType.Deleted:
-                    return new DeletetionLogDetailsAuditor(_dbEntry, newlog);
+                    return new DeletetionLogDetailsAuditor(_dbEntry, newlog, dbEntryDbValues);
 
                 case EventType.Modified:
-                    return new ChangeLogDetailsAuditor(_dbEntry, newlog);
+                    return new ChangeLogDetailsAuditor(_dbEntry, newlog, dbEntryDbValues);
 
                 case EventType.SoftDeleted:
-                    return new SoftDeletedLogDetailsAuditor(_dbEntry, newlog);
+                    return new SoftDeletedLogDetailsAuditor(_dbEntry, newlog, dbEntryDbValues);
 
                 case EventType.UnDeleted:
-                    return new UnDeletedLogDetailsAudotor(_dbEntry, newlog);
+                    return new UnDeletedLogDetailsAudotor(_dbEntry, newlog, dbEntryDbValues);
 
                 default:
                     return null;
@@ -120,7 +121,10 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
             if (GlobalTrackingConfig.DisconnectedContext)
             {
-                originalValue = _dbEntry.GetDatabaseValues().GetValue<object>(propertyName);
+                if (dbEntryDbValues == null)
+                    dbEntryDbValues = _dbEntry.GetDatabaseValues();
+
+                originalValue = dbEntryDbValues.GetValue<object>(propertyName);
             }
             else
             {
